@@ -5,6 +5,6 @@ import (
 )
 
 var testTopics = 10
-var testMsgs = 500
-var testSubs = 1000
+var testMsgs = 5
+var testSubs = 10
 var testTimeout = time.Second * 60

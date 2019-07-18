@@ -39,11 +39,11 @@ func channelTest(b *testing.B, topics int, subs int, msgs int) {
 	finished := make(chan bool)
 	wg := sync.WaitGroup{}
 	for i := 0; i < topics; i++ {
-		go func(i int) {
+		func(i int) {
 			t := channels.NewTopic()
 			for s := 0; s < subs; s++ {
-				ch := t.Subscribe(ctx)
 				wg.Add(msgs)
+				ch := t.Subscribe(ctx)
 				go func(t *channels.Topic) {
 					for m := 0; m < msgs; m++ {
 						<-ch
@@ -73,13 +73,13 @@ func callbackTest(b *testing.B, topics int, subs int, msgs int) {
 	finished := make(chan bool)
 	wg := sync.WaitGroup{}
 	for i := 0; i < topics; i++ {
-		go func(i int) {
+		func(i int) {
 			t := callback.NewTopic()
 			for s := 0; s < subs; s++ {
+				wg.Add(msgs)
 				fn := func(interface{}) {
 					wg.Done()
 				}
-				wg.Add(msgs)
 				t.Subscribe(&fn)
 			}
 			go func(i int, t *callback.Topic) {
