@@ -25,6 +25,7 @@ func BenchmarkSubsCallback(b *testing.B) {
 	callbackTest(b, testTopics, b.N, testMsgs)
 }
 
+/*
 func BenchmarkMsgsChannel(b *testing.B) {
 	channelTest(b, testTopics, testSubs, b.N)
 }
@@ -32,7 +33,7 @@ func BenchmarkMsgsChannel(b *testing.B) {
 func BenchmarkMsgsCallback(b *testing.B) {
 	callbackTest(b, testTopics, testSubs, b.N)
 }
-
+*/
 func channelTest(b *testing.B, topics int, subs int, msgs int) {
 	ctx, _ := context.WithTimeout(context.Background(), testTimeout)
 	finished := make(chan bool)
