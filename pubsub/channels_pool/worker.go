@@ -1,6 +1,12 @@
 package channels_pool
 
+import (
+	"context"
+	"log"
+)
+
 type Work struct {
+	ctx  context.Context
 	ch   chan interface{}
 	data interface{}
 }
@@ -26,7 +32,11 @@ func (w *Worker) Start() {
 			w.workerChan <- w.channel
 			select {
 			case job := <-w.channel:
-				job.ch <- job.data
+				select {
+				case <-job.ctx.Done():
+					log.Fatalf("Channel already closed: %v", job.data)
+				case job.ch <- job.data: // value never read
+				}
 			case <-w.end:
 				return
 			}
@@ -34,6 +44,6 @@ func (w *Worker) Start() {
 	}()
 }
 
-func (w *Worker) End() {
+func (w *Worker) Stop() {
 	w.end <- true
 }

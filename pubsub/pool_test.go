@@ -3,52 +3,52 @@ package pubsub
 import (
 	"context"
 	"fmt"
-	"github.com/roderm/benchmarks/pubsub/callback"
-	"github.com/roderm/benchmarks/pubsub/channels"
+	callback "github.com/roderm/benchmarks/pubsub/callback_pool"
+	channels "github.com/roderm/benchmarks/pubsub/channels_pool"
 	"sync"
 	"testing"
 )
 
-func BenchmarkTopicChannel(b *testing.B) {
-	channelTest(b, b.N, testSubs, testMsgs)
+func BenchmarkTopicChannelPool(b *testing.B) {
+	channelTestPool(b, b.N, testSubs, testMsgs)
 }
 
-func BenchmarkTopicCallback(b *testing.B) {
-	callbackTest(b, b.N, testSubs, testMsgs)
+func BenchmarkTopicCallbackPool(b *testing.B) {
+	callbackTestPool(b, b.N, testSubs, testMsgs)
 }
 
-func BenchmarkSubsChannel(b *testing.B) {
-	channelTest(b, testTopics, b.N, testMsgs)
+func BenchmarkSubsChannelPool(b *testing.B) {
+	channelTestPool(b, testTopics, b.N, testMsgs)
 }
 
-func BenchmarkSubsCallback(b *testing.B) {
-	callbackTest(b, testTopics, b.N, testMsgs)
+func BenchmarkSubsCallbackPool(b *testing.B) {
+	callbackTestPool(b, testTopics, b.N, testMsgs)
 }
 
-func BenchmarkMsgsChannel(b *testing.B) {
-	channelTest(b, testTopics, testSubs, b.N)
+func BenchmarkMsgsChannelPool(b *testing.B) {
+	channelTestPool(b, testTopics, testSubs, b.N)
 }
 
-func BenchmarkMsgsCallback(b *testing.B) {
-	callbackTest(b, testTopics, testSubs, b.N)
+func BenchmarkMsgsCallbackPool(b *testing.B) {
+	callbackTestPool(b, testTopics, testSubs, b.N)
 }
 
-func channelTest(b *testing.B, topics int, subs int, msgs int) {
-	ctx, _ := context.WithTimeout(context.Background(), testTimeout)
+func channelTestPool(b *testing.B, topics int, subs int, msgs int) {
+	ctx, cancel := context.WithTimeout(context.Background(), testTimeout)
 	finished := make(chan bool)
 	wg := sync.WaitGroup{}
 	for i := 0; i < topics; i++ {
 		func(i int) {
-			t := channels.NewTopic()
+			t := channels.NewTopic(testWorkers)
 			for s := 0; s < subs; s++ {
 				wg.Add(msgs)
 				ch := t.Subscribe(ctx)
-				go func(t *channels.Topic) {
+				go func(t *channels.Topic, ch <-chan interface{}) {
 					for m := 0; m < msgs; m++ {
 						<-ch
 						wg.Done()
 					}
-				}(t)
+				}(t, ch)
 			}
 			go func(i int, t *channels.Topic) {
 				for m := 0; m < msgs; m++ {
@@ -63,17 +63,18 @@ func channelTest(b *testing.B, topics int, subs int, msgs int) {
 	}()
 	select {
 	case <-finished:
+		cancel()
 	case <-ctx.Done():
 		b.Error("failed finishing: run in timeout")
 	}
 }
-func callbackTest(b *testing.B, topics int, subs int, msgs int) {
+func callbackTestPool(b *testing.B, topics int, subs int, msgs int) {
 	ctx, _ := context.WithTimeout(context.Background(), testTimeout)
 	finished := make(chan bool)
 	wg := sync.WaitGroup{}
 	for i := 0; i < topics; i++ {
 		func(i int) {
-			t := callback.NewTopic()
+			t := callback.NewTopic(testWorkers)
 			for s := 0; s < subs; s++ {
 				wg.Add(msgs)
 				fn := func(interface{}) {

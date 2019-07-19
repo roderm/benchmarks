@@ -19,6 +19,7 @@ func NewTopic(workers int) *Topic {
 	for i := 0; i < workers; i++ {
 		t.workers = append(t.workers, NewWorker(t.workerChan))
 	}
+	t.Start()
 	return t
 }
 
@@ -60,8 +61,10 @@ func (t *Topic) Publish(msg interface{}) {
 			t.subs = append(t.subs[:i], t.subs[i+1:]...)
 			continue
 		}
-		cb := *f
-		cb(msg)
+		t.pubs <- Work{
+			data: msg,
+			fn:   *f,
+		}
 	}
 }
 

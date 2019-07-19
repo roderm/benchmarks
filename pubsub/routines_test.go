@@ -3,37 +3,37 @@ package pubsub
 import (
 	"context"
 	"fmt"
-	"github.com/roderm/benchmarks/pubsub/callback"
-	"github.com/roderm/benchmarks/pubsub/channels"
+	callback "github.com/roderm/benchmarks/pubsub/callback_routines"
+	channels "github.com/roderm/benchmarks/pubsub/channels_routines"
 	"sync"
 	"testing"
 )
 
-func BenchmarkTopicChannel(b *testing.B) {
-	channelTest(b, b.N, testSubs, testMsgs)
+func BenchmarkTopicChannelRoutine(b *testing.B) {
+	channelTestRoutine(b, b.N, testSubs, testMsgs)
 }
 
-func BenchmarkTopicCallback(b *testing.B) {
-	callbackTest(b, b.N, testSubs, testMsgs)
+func BenchmarkTopicCallbackRoutine(b *testing.B) {
+	callbackTestRoutine(b, b.N, testSubs, testMsgs)
 }
 
-func BenchmarkSubsChannel(b *testing.B) {
-	channelTest(b, testTopics, b.N, testMsgs)
+func BenchmarkSubsChannelRoutine(b *testing.B) {
+	channelTestRoutine(b, testTopics, b.N, testMsgs)
 }
 
-func BenchmarkSubsCallback(b *testing.B) {
-	callbackTest(b, testTopics, b.N, testMsgs)
+func BenchmarkSubsCallbackRoutine(b *testing.B) {
+	callbackTestRoutine(b, testTopics, b.N, testMsgs)
 }
 
-func BenchmarkMsgsChannel(b *testing.B) {
-	channelTest(b, testTopics, testSubs, b.N)
+func BenchmarkMsgsChannelRoutine(b *testing.B) {
+	channelTestRoutine(b, testTopics, testSubs, b.N)
 }
 
-func BenchmarkMsgsCallback(b *testing.B) {
-	callbackTest(b, testTopics, testSubs, b.N)
+func BenchmarkMsgsCallbackRoutineRoutine(b *testing.B) {
+	callbackTestRoutine(b, testTopics, testSubs, b.N)
 }
 
-func channelTest(b *testing.B, topics int, subs int, msgs int) {
+func channelTestRoutine(b *testing.B, topics int, subs int, msgs int) {
 	ctx, _ := context.WithTimeout(context.Background(), testTimeout)
 	finished := make(chan bool)
 	wg := sync.WaitGroup{}
@@ -67,7 +67,7 @@ func channelTest(b *testing.B, topics int, subs int, msgs int) {
 		b.Error("failed finishing: run in timeout")
 	}
 }
-func callbackTest(b *testing.B, topics int, subs int, msgs int) {
+func callbackTestRoutine(b *testing.B, topics int, subs int, msgs int) {
 	ctx, _ := context.WithTimeout(context.Background(), testTimeout)
 	finished := make(chan bool)
 	wg := sync.WaitGroup{}

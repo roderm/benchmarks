@@ -6,14 +6,43 @@ import (
 
 // Topic is a simple pubsub struct
 type Topic struct {
-	subs map[chan interface{}]context.Context
+	subs       map[chan interface{}]context.Context
+	pubs       chan Work
+	end        chan bool
+	workers    []*Worker
+	workerChan chan chan Work
 }
 
 // NewTopic creates a topic with no subscribers
-func NewTopic() *Topic {
-	return &Topic{
-		subs: make(map[chan interface{}]context.Context),
+func NewTopic(workers int) *Topic {
+	t := &Topic{
+		subs:       make(map[chan interface{}]context.Context),
+		pubs:       make(chan Work),
+		end:        make(chan bool),
+		workerChan: make(chan chan Work),
 	}
+	for i := 0; i < workers; i++ {
+		t.workers = append(t.workers, NewWorker(t.workerChan))
+	}
+	t.Start()
+	return t
+}
+
+func (t *Topic) Start() {
+	go func() {
+		for {
+			select {
+			case <-t.end:
+				for _, w := range t.workers {
+					w.Stop() // stop worker
+				}
+				return
+			case work := <-t.pubs:
+				worker := <-t.workerChan // wait for available channel
+				worker <- work           // dispatch work to worker
+			}
+		}
+	}()
 }
 
 // Subscribe a topic with a context, if context closed, subscribton ends
@@ -31,18 +60,19 @@ func (t *Topic) Unsubscribe(ch chan interface{}) {
 // Publish new value to all subscribers
 func (t *Topic) Publish(msg interface{}) {
 	for ch, ctx := range t.subs {
-		select {
-		case ch <- msg:
-			continue
-		case <-ctx.Done():
-			go t.Unsubscribe(ch)
-		default:
+		t.pubs <- Work{
+			ctx:  ctx,
+			ch:   ch,
+			data: msg,
 		}
 	}
 }
 
 // Close all channels which subscribed and deletes them
 func (t *Topic) Close() {
+	for _, w := range t.workers {
+		w.Stop()
+	}
 	for ch := range t.subs {
 		close(ch)
 		delete(t.subs, ch)
