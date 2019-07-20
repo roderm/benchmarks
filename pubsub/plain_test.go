@@ -7,6 +7,7 @@ import (
 	"github.com/roderm/benchmarks/pubsub/channels"
 	"sync"
 	"testing"
+	"time"
 )
 
 func BenchmarkTopicChannel(b *testing.B) {
@@ -45,6 +46,7 @@ func channelTest(b *testing.B, topics int, subs int, msgs int) {
 				ch := t.Subscribe(ctx)
 				go func(t *channels.Topic) {
 					for m := 0; m < msgs; m++ {
+						time.Sleep(time.Millisecond * time.Duration(sleepMills))
 						<-ch
 						wg.Done()
 					}
@@ -77,6 +79,7 @@ func callbackTest(b *testing.B, topics int, subs int, msgs int) {
 			for s := 0; s < subs; s++ {
 				wg.Add(msgs)
 				fn := func(interface{}) {
+					time.Sleep(time.Millisecond * time.Duration(sleepMills))
 					wg.Done()
 				}
 				t.Subscribe(&fn)

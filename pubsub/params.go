@@ -4,6 +4,7 @@ import (
 	"time"
 )
 
+var sleepMills = 2 // Add blocking for subscriptions
 var testWorkers = 10
 var testTopics = 10
 var testMsgs = 100

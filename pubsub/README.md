@@ -1,5 +1,5 @@
 # Pubsub
-In go we have channels for multithreaded communication between go-routines. In my first benchmark-test I'm wondering how fast they are compared to callbacks.
+In go we have channels for multithreaded communication between go-routines. In my first benchmark-test I'm wondering how fast they are compared to callbacks for a pub-sub system.
 
 ## plain
 without any go-routines
