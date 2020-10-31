@@ -1,0 +1,22 @@
+version: "3.5"
+
+services:
+  roach:
+    image: cockroachdb/cockroach:latest
+    hostname: roach
+    command: 
+    - start 
+    - --insecure
+    ports: 
+    - 26257:26257
+    - 6080:8080
+    restart: unless-stopped
+
+  benchmark:
+    image: roderm/go-protoc
+    volumes:
+      - ~/.ssh:/root/.ssh
+      - ~/.ssh_eyevip:/root/.ssh_eyevip
+      # Update this to wherever you want VS Code to mount the folder of your project
+      - .:/golang/src/github.com/roderm/benchmarks/sql
+    command: /bin/sh -c "while sleep 1000; do :; done"

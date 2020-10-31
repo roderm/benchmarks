@@ -1,0 +1,26 @@
+[
+    {
+        "name": "a",
+        "branch": "finance",
+        "url": "http://example.com",
+        "founded": "01-01-1900",
+        "employees": [
+            {
+                "firstname": "Max",
+                "lastname": "Mustermann",
+                "email": "max.mustermann@example.com",
+                "birthdate": "05-05-1990"
+            }
+        ],
+        "products": [
+            {
+                "name": "prod_1",
+                "prod_type": "software",
+                "manufactured": 3,
+                "sold": 534,
+                "price": 59.95,
+                "released": "12-05-2020"
+            }
+        ]
+    }
+]
