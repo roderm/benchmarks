@@ -62,7 +62,8 @@ func InsertData(conn *sql.DB, comps, empls, prods int) error {
 }
 
 func main() {
-	db, err := MakeSetup()
+	db, err := msql.GetDbConn()
+	// db, err := MakeSetup()
 	if err != nil {
 		panic(err)
 	}

@@ -1,10 +1,11 @@
 package entity
 
 import (
-	"encoding/json"
 	"fmt"
 	"reflect"
 	"time"
+
+	"github.com/mailru/easyjson"
 )
 
 type Company struct {
@@ -22,5 +23,5 @@ func (h *Company) Scan(value interface{}) (err error) {
 	if !ok {
 		return fmt.Errorf("Can't cast %s to []byte", reflect.TypeOf(value))
 	}
-	return json.Unmarshal(buff, h)
+	return easyjson.Unmarshal(buff, h)
 }
