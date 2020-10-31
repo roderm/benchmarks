@@ -16,8 +16,8 @@ type Company struct {
 	Branch    string
 	Url       string
 	Founded   time.Time
-	Employees ArrEmployee
-	Products  ArrProduct
+	Employees []*Employee
+	Products  []*Product
 }
 
 func (h *Company) Scan(value interface{}) (err error) {

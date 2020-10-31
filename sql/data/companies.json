@@ -1,0 +1,20 @@
+[
+    {
+        "name": "a",
+        "branch": "finance",
+        "url": "http://example.com",
+        "_founded": "1900-01-01"
+    },
+    {
+        "name": "google",
+        "branch": "IT-Service",
+        "url": "http://google.com",
+        "_founded": "1998-09-04"
+    },
+    {
+        "name": "facebook",
+        "branch": "IT-Service",
+        "url": "http://facebook.com",
+        "_founded": "2004-02-04"
+    }
+]

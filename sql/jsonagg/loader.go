@@ -8,49 +8,58 @@ import (
 	"github.com/roderm/benchmarks/sql/entity"
 )
 
-func Select() ([]*entity.Company, error) {
-	var conn sql.Conn
+type SqlLoader struct {
+	conn *sql.DB
+}
+
+func New(conn *sql.DB) *SqlLoader {
+	return &SqlLoader{
+		conn: conn,
+	}
+}
+
+func (s *SqlLoader) Select() ([]*entity.Company, error) {
 	rows := []*entity.Company{}
-	stmt, err := conn.PrepareContext(context.TODO(), `
+	stmt, err := s.conn.PrepareContext(context.TODO(), `
 	SELECT JSON_BUILD_OBJECT(
-		'id', company.id,
-		'name', company.name,
-		'branch', company.branch,
-		'url', company.url,
-		'founded', company.founded,
-		'employees', employee.value,
-		'products', product.value
-	) as company
+		'id', "company"."id",
+		'name', "company"."name",
+		'branch', "company"."branch",
+		'url', "company"."url",
+		'founded', "company"."founded",
+		'employees', "employee"."value",
+		'products', "product"."value"
+	) as "company"
 	FROM
-		company
+		"company"
 		LEFT JOIN (
 			SELECT
-				company_id,
+				"company_id",
 				JSON_AGG(JSON_BUILD_OBJECT(
-					'id', employee.id,
-					'firstname', employee.firstname,
-					'lastname', employee.lastname,
-					'email', employee.email,
-					'birthdate', employee.birthdate
+					'id', "employee"."id",
+					'firstname', "employee"."firstname",
+					'lastname', "employee"."lastname",
+					'email', "employee"."email",
+					'birthdate', "employee"."birthdate"
 				)) as value
-			FROM employee
-			GROUP BY company_id
-		) AS employee on employee.company_id = company.id
+			FROM "employee"
+			GROUP BY "company_id"
+		) AS "employee" on "employee"."company_id" = "company"."id"
 		LEFT JOIN (
 			SELECT
-				company_id,
+				"company_id",
 				JSON_AGG(JSON_BUILD_OBJECT(
-					'id', product.id,
-					'name', product.name,
-					'prod_type', product.prod_type,
-					'manufactered', product.manufactered,
-					'sold', product.sold,
-					'price', product.price,
-					'released', product.released
-				)) as value
-			FROM product
-			GROUP BY company_id
-		) AS product on product.company_id = company.id
+					'id', "product"."id",
+					'name', "product"."name",
+					'prod_type', "product"."prod_type",
+					'manufactured', "product"."manufactured",
+					'sold', "product"."sold",
+					'price', "product"."price",
+					'released', "product"."released"
+				)) as "value"
+			FROM "product"
+			GROUP BY "company_id"
+		) AS "product" on "product"."company_id" = "company"."id"
 	`)
 	if err != nil {
 		return rows, err
@@ -60,8 +69,8 @@ func Select() ([]*entity.Company, error) {
 		return rows, err
 	}
 	defer companyRows.Close()
-	for companyRows.NextResultSet() {
-		var row *entity.Company
+	for companyRows.Next() {
+		row := new(entity.Company)
 		err := companyRows.Scan(row)
 		if err != nil {
 			return nil, err
@@ -71,6 +80,6 @@ func Select() ([]*entity.Company, error) {
 	return rows, nil
 }
 
-func Insert(c *entity.Company) error {
+func (s *SqlLoader) Insert(c *entity.Company) error {
 	return fmt.Errorf("Not implemented")
 }

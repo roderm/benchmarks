@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS "company" (
     "name" VARCHAR(64) NOT NULL,
     "branch" VARCHAR(64) NOT NULL,
     "url" VARCHAR(128),
-    "founded" DATE,
+    "founded" TIMESTAMP,
     PRIMARY KEY ("id")
 );
 
@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS "employee" (
     "firstname" VARCHAR(64),
     "lastname" VARCHAR(64), 
     "email" VARCHAR(64), 
-    "birthdate" DATE,
+    "birthdate" TIMESTAMP,
     PRIMARY KEY ("id"),
     FOREIGN KEY ("company_id") REFERENCES "company"("id")
 );
@@ -23,10 +23,10 @@ CREATE TABLE IF NOT EXISTS "product" (
     "company_id" UUID NOT NULL,
     "name" VARCHAR(128),
     "prod_type" VARCHAR(64),
-    "manufactered" INT,
+    "manufactured" INT,
     "sold" INT,
     "price" FLOAT,
-    "released" DATE,
+    "released" TIMESTAMP,
     PRIMARY KEY ("id"),
     FOREIGN KEY ("company_id") REFERENCES "company"("id")
 );
