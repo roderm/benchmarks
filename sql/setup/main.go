@@ -6,11 +6,10 @@ import (
 	"io/ioutil"
 
 	_ "github.com/lib/pq"
+	msql "github.com/roderm/benchmarks/sql"
 	"github.com/roderm/benchmarks/sql/dataloader"
 	"github.com/roderm/benchmarks/sql/setup/data"
 )
-
-const DB_NAME = "benchmark"
 
 func MakeSetup() (*sql.DB, error) {
 	db, err := CreateDB()
@@ -21,20 +20,16 @@ func MakeSetup() (*sql.DB, error) {
 	return db, err
 }
 
-func GetDbConn() (*sql.DB, error) {
-	return sql.Open("postgres", "postgres://root@roach:26257/"+DB_NAME+"?sslmode=disable")
-}
-
 func CreateDB() (*sql.DB, error) {
 	conn, err := sql.Open("postgres", "postgres://root@roach:26257/system?sslmode=disable")
 	if err != nil {
 		return conn, err
 	}
-	_, err = conn.Exec(`DROP DATABASE IF EXISTS ` + DB_NAME)
+	_, err = conn.Exec(`DROP DATABASE IF EXISTS ` + msql.DB_NAME)
 	if err != nil {
 		return conn, err
 	}
-	_, err = conn.Exec(`CREATE DATABASE ` + DB_NAME)
+	_, err = conn.Exec(`CREATE DATABASE ` + msql.DB_NAME)
 	if err != nil {
 		return conn, err
 	}
@@ -42,7 +37,7 @@ func CreateDB() (*sql.DB, error) {
 	if err != nil {
 		return conn, err
 	}
-	return GetDbConn()
+	return msql.GetDbConn()
 }
 
 func Schema(conn *sql.DB) error {
@@ -71,6 +66,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	defer db.Close()
 	fmt.Println("DB and Schema recreated.")
 	comps := data.GetCompanies(20, 200, 100)
 	loader := dataloader.New(db)

@@ -5,11 +5,10 @@ import (
 
 	"github.com/roderm/benchmarks/sql/dataloader"
 	"github.com/roderm/benchmarks/sql/jsonagg"
-	setup "github.com/roderm/benchmarks/sql/setup"
 )
 
 func BenchmarkJSON(b *testing.B) {
-	db, err := setup.GetDbConn()
+	db, err := GetDbConn()
 	if err != nil {
 		b.Fatal(err)
 	}
@@ -23,7 +22,7 @@ func BenchmarkJSON(b *testing.B) {
 }
 
 func BenchmarkDataloader(b *testing.B) {
-	db, err := setup.GetDbConn()
+	db, err := GetDbConn()
 	if err != nil {
 		b.Fatal(err)
 	}

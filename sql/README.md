@@ -17,3 +17,15 @@ PROBLEM: empty dates are store in cockroachdb as "0001-01-01T00:00:00" and can't
 ```
 Scan error on column index 0, name "company": parsing time ""0001-01-01T00:00:00"" as ""2006-01-02T15:04:05Z07:00"": cannot parse """ as "Z07:00"
 ```
+
+# Results: 
+## 20 companies, 200 employees, 100 products
+```
+goos: linux
+goarch: amd64
+pkg: github.com/roderm/benchmarks/sql
+BenchmarkJSON-4                 1000000000               0.222 ns/op
+BenchmarkDataloader-4           1000000000               0.109 ns/op
+PASS
+ok      github.com/roderm/benchmarks/sql        4.264s
+```
