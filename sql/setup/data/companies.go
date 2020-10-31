@@ -9,7 +9,7 @@ import (
 )
 
 func loadCompanyJson() (list []*entity.Company) {
-	f, err := ioutil.ReadFile("data/companies.json")
+	f, err := ioutil.ReadFile("setup/data/companies.json")
 	if err != nil {
 		panic(err)
 	}
@@ -20,7 +20,7 @@ func loadCompanyJson() (list []*entity.Company) {
 	return
 }
 func loadEmployeeJson() (list []*entity.Employee) {
-	f, err := ioutil.ReadFile("data/employees.json")
+	f, err := ioutil.ReadFile("setup/data/employees.json")
 	if err != nil {
 		panic(err)
 	}
@@ -31,7 +31,7 @@ func loadEmployeeJson() (list []*entity.Employee) {
 	return
 }
 func loadProductJson() (list []*entity.Product) {
-	f, err := ioutil.ReadFile("data/products.json")
+	f, err := ioutil.ReadFile("setup/data/products.json")
 	if err != nil {
 		panic(err)
 	}

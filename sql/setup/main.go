@@ -1,12 +1,13 @@
-package sql
+package main
 
 import (
 	"database/sql"
+	"fmt"
 	"io/ioutil"
 
 	_ "github.com/lib/pq"
-	"github.com/roderm/benchmarks/sql/data"
 	"github.com/roderm/benchmarks/sql/dataloader"
+	"github.com/roderm/benchmarks/sql/setup/data"
 )
 
 const DB_NAME = "benchmark"
@@ -63,4 +64,21 @@ func InsertData(conn *sql.DB, comps, empls, prods int) error {
 		}
 	}
 	return nil
+}
+
+func main() {
+	db, err := MakeSetup()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("DB and Schema recreated.")
+	comps := data.GetCompanies(20, 200, 100)
+	loader := dataloader.New(db)
+	for i, c := range comps {
+		err := loader.Insert(c)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Printf("[%d] New company inserted \n", i)
+	}
 }

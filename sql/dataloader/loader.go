@@ -109,11 +109,11 @@ func (s *SqlLoader) Insert(c *entity.Company) error {
 		VALUES ($1, $2, $3, $4)
 		RETURNING "id"`)
 	if err != nil {
-		panic(err)
+		return err
 	}
 	err = stmt.QueryRow(c.Name, c.Branch, c.Url, c.Founded).Scan(&c.Id)
 	if err != nil {
-		panic(err)
+		return err
 	}
 	for _, empl := range c.Employees {
 		stmt, err := s.conn.PrepareContext(context.TODO(), `
@@ -122,11 +122,11 @@ func (s *SqlLoader) Insert(c *entity.Company) error {
 		RETURNING id
 		`)
 		if err != nil {
-			panic(err)
+			return err
 		}
 		err = stmt.QueryRow(c.Id, empl.Firstname, empl.Lastname, empl.Email, empl.Birthdate).Scan(&empl.Id)
 		if err != nil {
-			panic(err)
+			return err
 		}
 	}
 	for _, prod := range c.Products {
@@ -135,11 +135,11 @@ func (s *SqlLoader) Insert(c *entity.Company) error {
 		VALUES ($1, $2, $3, $4, $5, $6, $7)
 		RETURNING "id";`)
 		if err != nil {
-			panic(err)
+			return err
 		}
 		err = stmt.QueryRow(c.Id, prod.Name, prod.ProdType, prod.Manufactured, prod.Sold, prod.Price, prod.Released).Scan(&prod.Id)
 		if err != nil {
-			panic(err)
+			return err
 		}
 	}
 	return nil

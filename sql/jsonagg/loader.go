@@ -26,7 +26,7 @@ func (s *SqlLoader) Select() ([]*entity.Company, error) {
 		'name', "company"."name",
 		'branch', "company"."branch",
 		'url', "company"."url",
-		'founded', "company"."founded",
+		-- 'founded', "company"."founded",
 		'employees', "employee"."value",
 		'products', "product"."value"
 	) as "company"
@@ -39,8 +39,8 @@ func (s *SqlLoader) Select() ([]*entity.Company, error) {
 					'id', "employee"."id",
 					'firstname', "employee"."firstname",
 					'lastname', "employee"."lastname",
-					'email', "employee"."email",
-					'birthdate', "employee"."birthdate"
+					'email', "employee"."email"
+					-- 'birthdate', "employee"."birthdate"
 				)) as value
 			FROM "employee"
 			GROUP BY "company_id"
@@ -54,8 +54,8 @@ func (s *SqlLoader) Select() ([]*entity.Company, error) {
 					'prod_type', "product"."prod_type",
 					'manufactured', "product"."manufactured",
 					'sold', "product"."sold",
-					'price', "product"."price",
-					'released', "product"."released"
+					'price', "product"."price"
+					-- 'released', "product"."released"
 				)) as "value"
 			FROM "product"
 			GROUP BY "company_id"

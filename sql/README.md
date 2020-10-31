@@ -3,7 +3,7 @@ To load n+1 problematic data from a database, there are a lot of diffrent soluti
 
 ## usage
 You can directly use docker-compose (`docker-compose up -d`) to start and afterwards connect to the benchmark container with `docker-compose exec benchmark bash` and go to `/golang/src/github.com/roderm/benchmark/sql`:
-- Setup the database and load it with data: `go test -bench=DBSetup`
+- Setup the database and load it with data: `go run setup/main.go` (you can modify the amount of companies/employes/product in here, currentls really slow)
 - Test the dataloader: `go test -bench=Dataloader`
 - Test the JSON (currently no working): `go test -bench=JSON`
 
