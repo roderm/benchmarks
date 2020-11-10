@@ -70,6 +70,7 @@ func (s *SqlLoader) Select() ([]*entity.Company, error) {
 	companyIds := []interface{}{}
 	emplTmp := make(map[string]*[]*entity.Employee)
 	prodTmp := make(map[string]*[]*entity.Product)
+	// grp := mutext.NewWaitGroup()
 	stmtCompany, err := s.conn.PrepareContext(context.TODO(), `
 	SELECT id, name, branch, url, founded 
 	FROM company;`)
@@ -95,11 +96,14 @@ func (s *SqlLoader) Select() ([]*entity.Company, error) {
 		prodTmp[row.Id] = &row.Products
 	}
 
+	// defer grp.Done()
 	err = s.selectEmployee(companyIds, emplTmp)
 	if err != nil {
 		return rows, err
 	}
+
 	err = s.selectProducts(companyIds, prodTmp)
+
 	return rows, err
 }
 

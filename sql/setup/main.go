@@ -21,7 +21,7 @@ func MakeSetup() (*sql.DB, error) {
 }
 
 func CreateDB() (*sql.DB, error) {
-	conn, err := sql.Open("postgres", "postgres://root@roach:26257/system?sslmode=disable")
+	conn, err := sql.Open("postgres", "postgres://root@localhost:26257/system?sslmode=disable")
 	if err != nil {
 		return conn, err
 	}
@@ -62,8 +62,8 @@ func InsertData(conn *sql.DB, comps, empls, prods int) error {
 }
 
 func main() {
-	db, err := msql.GetDbConn()
-	// db, err := MakeSetup()
+	// db, err := msql.GetDbConn()
+	db, err := MakeSetup()
 	if err != nil {
 		panic(err)
 	}

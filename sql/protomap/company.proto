@@ -14,41 +14,40 @@ message Company {
 	string Branch = 3 [(sqlgen.dbcol) = "branch"];
 	string Url = 4 [(sqlgen.dbcol) = "url"];
 	string Founded = 5 [(sqlgen.dbcol) = "founded"];
-	// repeated Employee Employees	= 6 [(sqlgen.dbcol) = "id", (sqlgen.dbfk) = "employee.company_id"];
-	// repeated Product Products	= 7 [(sqlgen.dbcol) = "id", (sqlgen.dbfk) = "product.company_id"];
-	repeated Contract Debitors	= 8 [(sqlgen.dbcol) = "id", (sqlgen.dbfk) = "contract.creditor_id"];
+	repeated Employee Employees	= 6 [(sqlgen.dbcol) = "id", (sqlgen.dbfk) = "employee.company_id"];
+	repeated Product Products	= 7 [(sqlgen.dbcol) = "id", (sqlgen.dbfk) = "product.company_id"];
+	repeated Contract Debitors	= 8 [(sqlgen.dbcol) = "id", (sqlgen.dbfk) = "contract.debitor_id"];
 	repeated Contract Creditors	= 9 [(sqlgen.dbcol) = "id", (sqlgen.dbfk) = "contract.creditor_id"];
 };
 
 message Contract {
 	option (sqlgen.dbtable) = "contract";
 	string Id = 1 [(sqlgen.dbpk) = AUTO, (sqlgen.dbcol) = "id"];
+	// string CreditorId = 2 [(sqlgen.dbcol) = "creditor_id"];
 	Company Creditor = 2 [(sqlgen.dbcol) = "creditor_id", (sqlgen.dbfk) = "company.id"];
 	Company Debitor = 3 [(sqlgen.dbcol) = "debitor_id", (sqlgen.dbfk) = "company.id"];
 	float Amount = 4 [(sqlgen.dbcol) = "amount"];
 }
 
-// message Employee {
-// 	option (sqlgen.dbtable) = "employee";
-// 	string Id = 1 [(sqlgen.dbpk) = AUTO, (sqlgen.dbcol) = "id"];
-// 	Company Company = 2 [(sqlgen.dbcol) = "company_id"];
-// 	// Company Company = 2 [(sqlgen.dbcol) = "company_id", (sqlgen.dbfk) = "company.id"];
-// 	// string Company = 2 [(sqlgen.dbcol) = "company_id", (sqlgen.dbfk) = "company.id"];
-// 	string Firstname = 3 [(sqlgen.dbcol) = "firstname"];
-// 	string Lastname = 4 [(sqlgen.dbcol) = "lastname"];
-// 	string Email = 5 [(sqlgen.dbcol) = "email"];
-// 	string Birthdate = 6 [(sqlgen.dbcol) = "birthdate"];
-// }
+message Employee {
+	option (sqlgen.dbtable) = "employee";
+	string Id = 1 [(sqlgen.dbpk) = AUTO, (sqlgen.dbcol) = "id"];
+	// Company Company = 2 [(sqlgen.dbcol) = "company_id"];
+	Company Company = 2 [(sqlgen.dbcol) = "company_id", (sqlgen.dbfk) = "company.id"];
+	string Firstname = 3 [(sqlgen.dbcol) = "firstname"];
+	string Lastname = 4 [(sqlgen.dbcol) = "lastname"];
+	string Email = 5 [(sqlgen.dbcol) = "email"];
+	string Birthdate = 6 [(sqlgen.dbcol) = "birthdate"];
+}
 
-// message Product {
-// 	option (sqlgen.dbtable) = "product";
-// 	string Id = 1 [(sqlgen.dbpk) = AUTO, (sqlgen.dbcol) = "id"];
-// 	Company Company = 2 [(sqlgen.dbcol) = "company_id", (sqlgen.dbfk) = "company.id"];
-// 	// string Company = 2 [(sqlgen.dbcol) = "company_id", (sqlgen.dbfk) = "company.id"];
-// 	string Name = 3 [(sqlgen.dbcol) = "name"];
-// 	string ProdType = 4 [(sqlgen.dbcol) = "prod_type"];
-// 	int64 Manufactured = 5 [(sqlgen.dbcol) = "manufactured"];
-// 	int64 Sold = 6 [(sqlgen.dbcol) = "sold"];
-// 	float Price = 7 [(sqlgen.dbcol) = "price"];
-// 	string Released = 8 [(sqlgen.dbcol) = "released"];
-// }
+message Product {
+	option (sqlgen.dbtable) = "product";
+	string Id = 1 [(sqlgen.dbpk) = AUTO, (sqlgen.dbcol) = "id"];
+	Company Company = 2 [(sqlgen.dbcol) = "company_id", (sqlgen.dbfk) = "company.id"];
+	string Name = 3 [(sqlgen.dbcol) = "name"];
+	string ProdType = 4 [(sqlgen.dbcol) = "prod_type"];
+	int64 Manufactured = 5 [(sqlgen.dbcol) = "manufactured"];
+	int64 Sold = 6 [(sqlgen.dbcol) = "sold"];
+	float Price = 7 [(sqlgen.dbcol) = "price"];
+	string Released = 8 [(sqlgen.dbcol) = "released"];
+}
