@@ -8,7 +8,7 @@ option go_package = "protomap";
 import "github.com/roderm/protoc-gen-go-sqlmap/sqlgen/sqlgen.proto";
 
 message Company {
-	option (sqlgen.dbtable) = "company";
+	option (sqlgen.table) = {name:"company", crud:[R]};
 	string Id = 1 [(sqlgen.dbpk) = AUTO, (sqlgen.dbcol) = "id"];
 	string Name = 2 [(sqlgen.dbcol) = "name"];
 	string Branch = 3 [(sqlgen.dbcol) = "branch"];
@@ -21,7 +21,7 @@ message Company {
 };
 
 message Contract {
-	option (sqlgen.dbtable) = "contract";
+	option (sqlgen.table) = {name:"contract", crud:[R]};
 	string Id = 1 [(sqlgen.dbpk) = AUTO, (sqlgen.dbcol) = "id"];
 	// string CreditorId = 2 [(sqlgen.dbcol) = "creditor_id"];
 	Company Creditor = 2 [(sqlgen.dbcol) = "creditor_id", (sqlgen.dbfk) = "company.id"];
@@ -30,10 +30,11 @@ message Contract {
 }
 
 message Employee {
-	option (sqlgen.dbtable) = "employee";
+	option (sqlgen.table) = {name:"employee", crud:[R]};
 	string Id = 1 [(sqlgen.dbpk) = AUTO, (sqlgen.dbcol) = "id"];
-	// Company Company = 2 [(sqlgen.dbcol) = "company_id"];
 	Company Company = 2 [(sqlgen.dbcol) = "company_id", (sqlgen.dbfk) = "company.id"];
+	// Company Company = 2 [(sqlgen.dbcol) = "company_id", (sqlgen.dbfk) = "company.id"];
+	// string Company = 2 [(sqlgen.dbcol) = "company_id", (sqlgen.dbfk) = "company.id"];
 	string Firstname = 3 [(sqlgen.dbcol) = "firstname"];
 	string Lastname = 4 [(sqlgen.dbcol) = "lastname"];
 	string Email = 5 [(sqlgen.dbcol) = "email"];
@@ -41,9 +42,10 @@ message Employee {
 }
 
 message Product {
-	option (sqlgen.dbtable) = "product";
+	option (sqlgen.table) = {name:"product", crud:[R]};
 	string Id = 1 [(sqlgen.dbpk) = AUTO, (sqlgen.dbcol) = "id"];
 	Company Company = 2 [(sqlgen.dbcol) = "company_id", (sqlgen.dbfk) = "company.id"];
+	// string Company = 2 [(sqlgen.dbcol) = "company_id", (sqlgen.dbfk) = "company.id"];
 	string Name = 3 [(sqlgen.dbcol) = "name"];
 	string ProdType = 4 [(sqlgen.dbcol) = "prod_type"];
 	int64 Manufactured = 5 [(sqlgen.dbcol) = "manufactured"];

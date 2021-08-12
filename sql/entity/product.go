@@ -8,13 +8,13 @@ import (
 )
 
 type Product struct {
-	Id           string
-	Name         string
-	ProdType     string
-	Manufactured int
-	Sold         int
-	Price        float32
-	Released     time.Time
+	Id           string    `db:"product_id"`
+	Name         string    `db:"product_name"`
+	ProdType     string    `db:"product_prod_type"`
+	Manufactured int       `db:"product_manufactured"`
+	Sold         int       `db:"product_sold"`
+	Price        float32   `db:"product_price"`
+	Released     time.Time `db:"product_released"`
 }
 
 func (h *Product) Scan(value interface{}) (err error) {

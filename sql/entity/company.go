@@ -9,11 +9,11 @@ import (
 )
 
 type Company struct {
-	Id        string
-	Name      string
-	Branch    string
-	Url       string
-	Founded   time.Time
+	Id        string    `db:"company_id"`
+	Name      string    `db:"company_name"`
+	Branch    string    `db:"company_branch"`
+	Url       string    `db:"company_url"`
+	Founded   time.Time `db:"company_founded"`
 	Employees []*Employee
 	Products  []*Product
 }
