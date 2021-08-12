@@ -29,3 +29,15 @@ BenchmarkDataloader-4           1000000000               0.109 ns/op
 PASS
 ok      github.com/roderm/benchmarks/sql        4.264s
 ```
+## 5 companies, 50 employees, 20 products
+```
+goos: darwin
+goarch: amd64
+pkg: github.com/roderm/benchmarks/sql
+cpu: Intel(R) Core(TM) i5-8259U CPU @ 2.30GHz
+BenchmarkDataloader-8           1000000000               0.04816 ns/op         0 B/op          0 allocs/op
+BenchmarkJSON-8                 1000000000               0.03385 ns/op         0 B/op          0 allocs/op
+BenchmarkCarta-8                       1        2922010735 ns/op        935053352 B/op  20948134 allocs/op
+PASS
+ok      github.com/roderm/benchmarks/sql        6.404s
+```
