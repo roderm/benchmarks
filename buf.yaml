@@ -1,0 +1,9 @@
+version: v1
+deps:
+  - buf.build/roderm/protoc-gen-go-sqlmap
+lint:
+  use:
+    - DEFAULT
+breaking:
+  use:
+    - FILE

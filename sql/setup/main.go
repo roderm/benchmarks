@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"io/ioutil"
 
 	_ "github.com/lib/pq"
@@ -58,4 +59,23 @@ func InsertData(conn *sql.DB, comps, empls, prods int) error {
 		}
 	}
 	return nil
+}
+
+func main() {
+	// db, err := msql.GetDbConn()
+	db, err := MakeSetup()
+	if err != nil {
+		panic(err)
+	}
+	defer db.Close()
+	fmt.Println("DB and Schema recreated.")
+	comps := data.GetCompanies(20, 100, 100)
+	loader := dataloader.New(db)
+	for i, c := range comps {
+		err := loader.Insert(c)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Printf("[%d] New company inserted \n", i)
+	}
 }

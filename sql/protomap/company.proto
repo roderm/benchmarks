@@ -4,52 +4,51 @@ package example;
 
 option go_package = "protomap";
 
-// import "github.com/gogo/protobuf/gogoproto/gogo.proto";
-import "github.com/roderm/protoc-gen-go-sqlmap/sqlgen/sqlgen.proto";
+import "proto/sqlgen/sqlgen.proto";
 
 message Company {
 	option (sqlgen.table) = {name:"company", crud:[R]};
-	string Id = 1 [(sqlgen.dbpk) = AUTO, (sqlgen.dbcol) = "id"];
-	string Name = 2 [(sqlgen.dbcol) = "name"];
-	string Branch = 3 [(sqlgen.dbcol) = "branch"];
-	string Url = 4 [(sqlgen.dbcol) = "url"];
-	string Founded = 5 [(sqlgen.dbcol) = "founded"];
-	repeated Employee Employees	= 6 [(sqlgen.dbcol) = "id", (sqlgen.dbfk) = "employee.company_id"];
-	repeated Product Products	= 7 [(sqlgen.dbcol) = "id", (sqlgen.dbfk) = "product.company_id"];
-	repeated Contract Debitors	= 8 [(sqlgen.dbcol) = "id", (sqlgen.dbfk) = "contract.debitor_id"];
-	repeated Contract Creditors	= 9 [(sqlgen.dbcol) = "id", (sqlgen.dbfk) = "contract.creditor_id"];
+	string Id = 1 [(sqlgen.col) = {pk: PK_AUTO, name: "id"}];
+	string Name = 2 [(sqlgen.col).name = "name"];
+	string Branch = 3 [(sqlgen.col).name = "branch"];
+	string Url = 4 [(sqlgen.col).name = "url"];
+	string Founded = 5 [(sqlgen.col).name = "founded"];
+	repeated Employee Employees	= 6 [(sqlgen.col) = { name: "id", fk: "employee.company_id"}];
+	repeated Product Products	= 7 [(sqlgen.col) = { name: "id", fk: "product.company_id"}];
+	repeated Contract Debitors	= 8 [(sqlgen.col) = { name: "id", fk: "contract.debitor_id"}];
+	repeated Contract Creditors	= 9 [(sqlgen.col) = { name: "id", fk: "contract.creditor_id"}];
 };
 
 message Contract {
 	option (sqlgen.table) = {name:"contract", crud:[R]};
-	string Id = 1 [(sqlgen.dbpk) = AUTO, (sqlgen.dbcol) = "id"];
+	string Id = 1 [(sqlgen.col) = {pk: PK_AUTO, name: "id"}];
 	// string CreditorId = 2 [(sqlgen.dbcol) = "creditor_id"];
-	Company Creditor = 2 [(sqlgen.dbcol) = "creditor_id", (sqlgen.dbfk) = "company.id"];
-	Company Debitor = 3 [(sqlgen.dbcol) = "debitor_id", (sqlgen.dbfk) = "company.id"];
-	float Amount = 4 [(sqlgen.dbcol) = "amount"];
+	Company Creditor = 2 [(sqlgen.col) = {name:"creditor_id", fk: "company.id"}];
+	Company Debitor = 3 [(sqlgen.col) = {name:"debitor_id", fk: "company.id"}];
+	float Amount = 4 [(sqlgen.col) = {name:"amount"}];
 }
 
 message Employee {
 	option (sqlgen.table) = {name:"employee", crud:[R]};
-	string Id = 1 [(sqlgen.dbpk) = AUTO, (sqlgen.dbcol) = "id"];
-	Company Company = 2 [(sqlgen.dbcol) = "company_id", (sqlgen.dbfk) = "company.id"];
+	string Id = 1 [(sqlgen.col) = {pk: PK_AUTO, name: "id"}];
+	Company Company = 2 [(sqlgen.col) = { name: "company_id", fk: "company.id"}];
 	// Company Company = 2 [(sqlgen.dbcol) = "company_id", (sqlgen.dbfk) = "company.id"];
 	// string Company = 2 [(sqlgen.dbcol) = "company_id", (sqlgen.dbfk) = "company.id"];
-	string Firstname = 3 [(sqlgen.dbcol) = "firstname"];
-	string Lastname = 4 [(sqlgen.dbcol) = "lastname"];
-	string Email = 5 [(sqlgen.dbcol) = "email"];
-	string Birthdate = 6 [(sqlgen.dbcol) = "birthdate"];
+	string Firstname = 3 [(sqlgen.col).name = "firstname"];
+	string Lastname = 4 [(sqlgen.col).name = "lastname"];
+	string Email = 5 [(sqlgen.col).name = "email"];
+	string Birthdate = 6 [(sqlgen.col).name = "birthdate"];
 }
 
 message Product {
 	option (sqlgen.table) = {name:"product", crud:[R]};
-	string Id = 1 [(sqlgen.dbpk) = AUTO, (sqlgen.dbcol) = "id"];
-	Company Company = 2 [(sqlgen.dbcol) = "company_id", (sqlgen.dbfk) = "company.id"];
-	// string Company = 2 [(sqlgen.dbcol) = "company_id", (sqlgen.dbfk) = "company.id"];
-	string Name = 3 [(sqlgen.dbcol) = "name"];
-	string ProdType = 4 [(sqlgen.dbcol) = "prod_type"];
-	int64 Manufactured = 5 [(sqlgen.dbcol) = "manufactured"];
-	int64 Sold = 6 [(sqlgen.dbcol) = "sold"];
-	float Price = 7 [(sqlgen.dbcol) = "price"];
-	string Released = 8 [(sqlgen.dbcol) = "released"];
+	string Id = 1 [(sqlgen.col) = {pk: PK_AUTO, name:"id"}];
+	Company Company = 2 [(sqlgen.col) = {name:"company_id",fk: "company.id"}];
+	// string Company = 2 [(sqlgen.col) = "company_id", (sqlgen.dbfk) = "company.id"];
+	string Name = 3 [(sqlgen.col).name = "name"];
+	string ProdType = 4 [(sqlgen.col).name = "prod_type"];
+	int64 Manufactured = 5 [(sqlgen.col).name = "manufactured"];
+	int64 Sold = 6 [(sqlgen.col).name = "sold"];
+	float Price = 7 [(sqlgen.col).name = "price"];
+	string Released = 8 [(sqlgen.col).name = "released"];
 }
