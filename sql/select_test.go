@@ -7,6 +7,7 @@ import (
 	"github.com/roderm/benchmarks/sql/dataloader"
 	"github.com/roderm/benchmarks/sql/jsonagg"
 	"github.com/roderm/benchmarks/sql/protomap"
+	"github.com/roderm/benchmarks/sql/sqlboiler"
 )
 
 // func BenchmarkSQLMap(b *testing.B) {
@@ -79,6 +80,25 @@ func BenchmarkJSON(b *testing.B) {
 	}
 	if len(rows) == 0 {
 		b.Fatal("No rows received")
+	}
+}
+
+func BenchmarkSqlboiler(b *testing.B) {
+	db, err := GetDbConn()
+	if err != nil {
+		b.Fatal(err)
+	}
+	rows, err := sqlboiler.New(db).Select()
+	if err != nil {
+		b.Fatal(err)
+	}
+	for _, r := range rows {
+		if len(r.R.Employees) == 0 {
+			b.Fatal("No Employees received")
+		}
+		if len(r.R.Products) == 0 {
+			b.Fatal("No Products received")
+		}
 	}
 }
 
