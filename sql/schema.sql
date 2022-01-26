@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS "company" (
-    "id" UUID DEFAULT gen_random_uuid(),
+    "id" UUID NOT NULL default uuid_generate_v4(),
     "name" VARCHAR(64) NOT NULL,
     "branch" VARCHAR(64) NOT NULL,
     "url" VARCHAR(128),
@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS "company" (
 );
 
 CREATE TABLE IF NOT EXISTS "employee" (
-    "id" UUID DEFAULT gen_random_uuid(),
+    "id" UUID NOT NULL default uuid_generate_v4(),
     "company_id" UUID NOT NULL,
     "firstname" VARCHAR(64),
     "lastname" VARCHAR(64), 
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS "employee" (
 );
 
 CREATE TABLE IF NOT EXISTS "product" (
-    "id" UUID DEFAULT gen_random_uuid(),
+    "id" UUID NOT NULL default uuid_generate_v4(),
     "company_id" UUID NOT NULL,
     "name" VARCHAR(128),
     "prod_type" VARCHAR(64),

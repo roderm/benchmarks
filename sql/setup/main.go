@@ -21,7 +21,7 @@ func MakeSetup() (*sql.DB, error) {
 }
 
 func CreateDB() (*sql.DB, error) {
-	conn, err := sql.Open("postgres", "postgres://root@localhost:26257/system?sslmode=disable")
+	conn, err := sql.Open("postgres", "postgres://roderm:password1234@localhost:5432/postgres?sslmode=disable")
 	if err != nil {
 		return conn, err
 	}
@@ -37,7 +37,12 @@ func CreateDB() (*sql.DB, error) {
 	if err != nil {
 		return conn, err
 	}
-	return msql.GetDbConn()
+	db, err := msql.GetDbConn()
+	if err != nil {
+		return db, err
+	}
+	_, err = db.Exec(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp" SCHEMA "public";`)
+	return db, err
 }
 
 func Schema(conn *sql.DB) error {

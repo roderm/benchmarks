@@ -1,17 +1,17 @@
 version: "3.5"
 
 services:
-  roach:
-    image: cockroachdb/cockroach:latest
-    hostname: roach
-    command: 
-    - start-single-node 
-    - --insecure
-    ports: 
-    - 26257:26257
-    - 6080:8080
-    restart: unless-stopped
-
+  postgres:
+    image: postgres:10.5
+    restart: always
+    environment:
+      - POSTGRES_USER=roderm
+      - POSTGRES_PASSWORD=password1234
+      - POSTGRES_DB=benchmark
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./pginit:/docker-entrypoint-initdb.d
   benchmark:
     image: roderm/go-protoc
     volumes:
